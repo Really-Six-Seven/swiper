@@ -29,14 +29,14 @@ def submit_vcode(request):
     phone = request.POST.get('phone')
     # 取到发到手机的验证码
     vcode = request.POST.get('vcode')
-    print(phone)
+
     # 取到缓存中的验证码
     cache_vcode = cache.get(keys.VCODE_KEY % phone)
-    print(cache_vcode)
+
 
     #对比验证码是否一致
     if vcode == cache_vcode:
-        user, _ = User.objects.get_or_create(phonenum=phone, nickname=phone)
+        user, _ = User.objects.get_or_create(phonenum=phone)
         # 两个返回值，一个是返回该用户，一个是创建则ture反之，
         request.session['uid'] = user.id
         return render_json(user.to_string())
@@ -46,9 +46,8 @@ def submit_vcode(request):
 
 def get_profile(request):
     """获取个人资料"""
-    uid = request.session.get('uid')
-    user = User.objects.get(id=uid)
-    profile = user.profile
+
+    profile = request.user.profile
 
     return render_json(profile.to_string())
 
@@ -77,10 +76,9 @@ def upload_avatar(request):
     #判断是否是post请求
     if not request.method == "POST":
         return render_json('request method error', errors.REQUEST_ERROR)
-
+    user=request.user
     avatar = request.FILES.get('avatar')
-    uid = request.session.get('uid')
-    user = User.objects.get(id=uid)
+
 
     logics.upload_avatar.delay(user, avatar)
 

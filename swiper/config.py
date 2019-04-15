@@ -15,3 +15,6 @@ QINIU_SECRET_KEY = '8SbPW1zlIrJx8I813RuDyHazbzDscMplDb_pCSg8'
 QINIU_BUCKET_NAME = 'swsw2'
 
 QINIU_BUCKET_URL = 'http://ppqjgo3rv.bkt.clouddn.com'
+
+# 反悔上限
+REGRET_TIMES=3
